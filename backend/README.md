@@ -1,24 +1,29 @@
 # backend/
 
-FastAPI (Python) — **a implementar**. Sem código de app ainda (fase de planejamento).
+FastAPI (Python) — protótipo inicial do pipeline WhereItFalls.
 
 Estrutura planejada (ver [`../docs/ARCHITECTURE.md`](../docs/ARCHITECTURE.md)):
 
 ```
 backend/
-├── app/
-│   ├── main.py
-│   ├── core/         # config, db, logging, sentry, scheduler
-│   ├── models/       # SQLModel
-│   ├── schemas/      # Pydantic
-│   ├── api/          # routers: reentries, risk, subscribe, webhooks, health
-│   ├── services/     # ingest, orbit, risk, alerts
-│   └── jobs/         # tarefas APScheduler
-├── tests/            # pytest
+├── app/              # FastAPI, schemas, serviços orbit/risk/alerts, jobs
+├── tests/            # pytest orbit/risk/api
 ├── pyproject.toml
 └── Dockerfile
 ```
 
-Stack: FastAPI · APScheduler · skyfield/sgp4 · shapely/geopandas/pyproj · SQLModel · psycopg/PostGIS · httpx · sentry-sdk.
+Stack: FastAPI · APScheduler · skyfield/sgp4 · shapely/geopandas/pyproj · SQLModel · psycopg/PostGIS · httpx.
 
-Antes de codar: carregar a skill `whereitfalls-backend` (e `whereitfalls-context`).
+## Rodar
+
+```bash
+uv sync --dev
+uv run fastapi dev app/main.py
+uv run pytest
+```
+
+O protótipo usa Space-Track TIP/GP real quando `SPACETRACK_USER` e
+`SPACETRACK_PASS` estão configurados. Há cache curto em memória, upsert
+idempotente em SQLModel quando `DATABASE_URL` está disponível e fallback demo
+para permitir apresentação mesmo se a fonte externa falhar. O próximo passo é
+persistir corredores/alert events e trocar o overlay em memória por PostGIS.
