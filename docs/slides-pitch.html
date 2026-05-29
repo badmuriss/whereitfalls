@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920, initial-scale=1">
+<title>WhereItFalls — Pitch · Space Connect (FIAP GS)</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+
+<style>
+/* ===========================================================================
+   WhereItFalls — Pitch deck (Orbital Mission Control)
+   Single-file, zero-dependency. Um slide visível por vez.
+   Navegação: ← → / espaço / clique nos dots / scroll. Tecla F = fullscreen.
+   Trocar tema: editar as CSS vars em :root.
+   =========================================================================== */
+:root{
+  --bg:#06080F;          /* near-black OLED (nunca preto puro) */
+  --surface:#0D111C;
+  --surface-2:#131826;
+  --hairline:rgba(255,255,255,.08);
+  --hairline-2:rgba(255,255,255,.14);
+  --text:#E6EAF2;
+  --dim:#8A93A6;
+  --dim-2:#5A6172;
+  --amber:#F0A202;       /* HAZARD — único acento */
+  --amber-soft:rgba(240,162,2,.14);
+  --hi:#FF6B35;          /* risco crítico, pontual */
+  --signal:#3DD6C4;      /* dado neutro, parcimônia */
+  --ok:#4ADE80;
+  --display:'Chakra Petch',system-ui,sans-serif;
+  --body:'Sora',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  background:var(--bg); color:var(--text); font-family:var(--body);
+  -webkit-font-smoothing:antialiased; text-rendering:geometricPrecision;
+  overflow:hidden;
+}
+
+/* starfield + horizonte */
+#stars{position:fixed; inset:0; z-index:0; pointer-events:none}
+.deck{position:fixed; inset:0; z-index:1; overflow:hidden}
+
+.slide{
+  position:absolute; inset:0; padding:90px 110px;
+  display:flex; flex-direction:column; justify-content:center;
+  opacity:0; transform:translateY(22px) scale(.995);
+  transition:opacity .55s var(--ease), transform .55s var(--ease);
+  pointer-events:none;
+}
+.slide.active{opacity:1; transform:none; pointer-events:auto}
+
+/* atmosfera: glow âmbar discreto no canto, horizonte curvo embaixo */
+.slide::before{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(48vw 44vh at 82% 8%, var(--amber-soft), transparent 60%);
+}
+.slide::after{
+  content:""; position:absolute; left:-20%; right:-20%; bottom:-58vh; height:80vh;
+  border-radius:50%; pointer-events:none;
+  background:radial-gradient(closest-side, rgba(61,214,196,.05), transparent 70%);
+  border-top:1px solid var(--hairline);
+}
+
+/* chrome */
+.chrome{position:absolute; top:42px; left:110px; right:110px; z-index:5;
+  display:flex; align-items:center; justify-content:space-between;
+  font-family:var(--mono); font-size:13px; letter-spacing:.14em; color:var(--dim)}
+.brand{display:inline-flex; align-items:center; gap:12px; color:var(--text)}
+.brand img{width:30px; height:30px; object-fit:contain; display:block}
+.brand b{font-family:var(--display); font-weight:700; letter-spacing:.02em; font-size:17px}
+.brand b span{color:var(--amber)}
+.tag-sys{color:var(--dim-2)}
+.foot{position:absolute; bottom:40px; left:110px; right:110px; z-index:5;
+  display:flex; align-items:center; justify-content:space-between;
+  font-family:var(--mono); font-size:12px; letter-spacing:.16em; color:var(--dim-2)}
+.foot .pg{color:var(--text)} .foot .pg span{color:var(--dim-2)}
+
+/* progress */
+.prog{position:fixed; left:0; top:0; height:2px; background:var(--amber); width:0;
+  z-index:10; transition:width .4s var(--ease)}
+
+/* dots */
+.dots{position:fixed; right:34px; top:50%; transform:translateY(-50%); z-index:10;
+  display:flex; flex-direction:column; gap:11px}
+.dots button{width:9px; height:9px; border-radius:50%; border:1px solid var(--hairline-2);
+  background:transparent; cursor:pointer; padding:0; transition:.3s var(--ease)}
+.dots button.on{background:var(--amber); border-color:var(--amber); transform:scale(1.25)}
+
+/* typography helpers */
+.eyebrow{font-family:var(--mono); font-size:14px; letter-spacing:.34em; text-transform:uppercase;
+  color:var(--amber); margin-bottom:26px}
+h1{font-family:var(--display); font-weight:700; font-size:clamp(2.6rem,6.6vw,5.4rem);
+  line-height:.96; letter-spacing:-.01em}
+h2{font-family:var(--display); font-weight:600; font-size:clamp(2rem,4.2vw,3.4rem);
+  line-height:1.02; letter-spacing:-.005em; margin-bottom:34px}
+.lead{font-size:clamp(1.1rem,1.7vw,1.5rem); color:var(--dim); max-width:60ch; line-height:1.6; font-weight:300}
+.amber{color:var(--amber)} .hi{color:var(--hi)} .sig{color:var(--signal)}
+.mono{font-family:var(--mono)}
+
+/* reveal stagger */
+.r{opacity:0; transform:translateY(20px); transition:opacity .6s var(--ease), transform .6s var(--ease)}
+.active .r{opacity:1; transform:none}
+.active .r:nth-child(1){transition-delay:.08s}
+.active .r:nth-child(2){transition-delay:.18s}
+.active .r:nth-child(3){transition-delay:.28s}
+.active .r:nth-child(4){transition-delay:.38s}
+.active .r:nth-child(5){transition-delay:.48s}
+.active .r:nth-child(6){transition-delay:.58s}
+
+/* cover */
+.cover{align-items:flex-start}
+.cover .logo-xl{width:88px; height:88px; object-fit:contain; margin-bottom:40px}
+.cover h1 span{color:var(--amber)}
+.cover .sub{margin-top:30px; font-size:clamp(1.15rem,1.9vw,1.7rem); color:var(--text); font-weight:400; max-width:30ch; line-height:1.35}
+.cover .meta{position:absolute; left:110px; bottom:110px; font-family:var(--mono); font-size:14px;
+  letter-spacing:.1em; color:var(--dim); line-height:1.95}
+.orbit{position:absolute; right:6%; top:50%; transform:translateY(-50%); width:520px; height:520px; opacity:.9}
+
+/* stat grid */
+.stats{display:grid; grid-template-columns:repeat(3,1fr); gap:26px; margin-top:14px}
+.stat{border-top:1px solid var(--hairline); padding-top:20px}
+.stat .n{font-family:var(--mono); font-weight:700; font-size:clamp(2.2rem,3.6vw,3.2rem); color:var(--amber); line-height:1}
+.stat .l{margin-top:12px; color:var(--dim); font-size:1rem; line-height:1.5; max-width:24ch}
+
+/* fontes (referência verificada, discreta mas legível) */
+.src{font-family:var(--mono); font-size:13px; letter-spacing:.03em; color:var(--dim);
+  margin-top:28px; line-height:1.8; max-width:92ch}
+.src b{color:var(--text); font-weight:500}
+
+/* participantes (mesmo padrão do deck Vigilante.AI) */
+.group{display:flex; gap:40px; margin-top:44px; flex-wrap:wrap}
+.member{display:flex; flex-direction:column; align-items:center; gap:12px; text-align:center}
+.member .avatar{width:104px; height:104px; border-radius:50%; background:var(--surface-2);
+  border:1px solid var(--hairline-2); overflow:hidden}
+.member .avatar img{width:100%; height:100%; object-fit:cover; display:block}
+.member .name{font-family:var(--display); font-weight:600; font-size:16px; color:var(--text); line-height:1.3}
+.member .rm{font-family:var(--mono); font-size:13px; color:var(--dim); letter-spacing:.06em}
+
+/* two-col */
+.two{display:grid; grid-template-columns:1.05fr .95fr; gap:64px; align-items:center}
+.cards{display:flex; flex-direction:column; gap:16px}
+.card{background:var(--surface); border:1px solid var(--hairline); border-radius:18px; padding:24px 26px}
+.card h3{font-family:var(--display); font-weight:600; font-size:1.25rem; margin-bottom:8px}
+.card p{color:var(--dim); font-size:1rem; line-height:1.55}
+.card .k{font-family:var(--mono); font-size:12px; letter-spacing:.2em; color:var(--amber); text-transform:uppercase}
+
+/* pipeline */
+.pipe{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:18px}
+.step{background:var(--surface); border:1px solid var(--hairline); border-radius:16px; padding:24px}
+.step .i{font-family:var(--mono); color:var(--amber); font-size:13px; letter-spacing:.18em; margin-bottom:14px}
+.step h4{font-family:var(--display); font-weight:600; font-size:1.18rem; margin-bottom:8px}
+.step p{color:var(--dim); font-size:1.02rem; line-height:1.55}
+
+/* list */
+.ul{list-style:none; display:flex; flex-direction:column; gap:18px; margin-top:10px}
+.ul li{display:flex; gap:16px; align-items:flex-start; font-size:1.18rem; line-height:1.5}
+.ul li b{color:var(--text); font-weight:600}
+.ul li .mk{font-family:var(--mono); color:var(--amber); flex:0 0 auto; margin-top:3px}
+.ul li span.t{color:var(--dim)}
+
+/* market chips */
+.chips{display:flex; flex-wrap:wrap; gap:12px; margin-top:26px}
+.chip{font-family:var(--mono); font-size:.98rem; letter-spacing:.06em; color:var(--text);
+  border:1px solid var(--hairline-2); border-radius:999px; padding:11px 19px; background:var(--surface)}
+.chip b{color:var(--amber)}
+
+/* quote */
+.quote{font-family:var(--display); font-weight:500; font-size:clamp(1.8rem,3.4vw,3rem); line-height:1.18; max-width:22ch}
+.quote .amber{display:inline}
+
+/* tiers */
+.tiers{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:18px}
+.tier{border:1px solid var(--hairline); border-radius:18px; padding:26px; background:var(--surface)}
+.tier.feat{border-color:var(--amber); background:linear-gradient(180deg,var(--amber-soft),transparent)}
+.tier .nm{font-family:var(--mono); letter-spacing:.18em; text-transform:uppercase; font-size:12px; color:var(--amber)}
+.tier h4{font-family:var(--display); font-weight:600; font-size:1.5rem; margin:10px 0 14px}
+.tier p{color:var(--dim); font-size:.98rem; line-height:1.55}
+
+@media (prefers-reduced-motion:reduce){
+  .slide,.r{transition:opacity .25s ease!important; transform:none!important}
+}
+
+/* screenshot do protótipo */
+.shot{display:flex; justify-content:center; align-items:center; margin-top:6px;
+  border:1px solid var(--hairline-2); border-radius:16px; overflow:hidden;
+  background:var(--surface); box-shadow:0 30px 90px rgba(0,0,0,.55)}
+.shot img{display:block; width:100%; height:auto; max-height:56vh; object-fit:contain}
+
+/* PRINT → PDF: cada slide = uma página 16:9 (1920×1080) */
+@page{size:1920px 1080px; margin:0}
+@media print{
+  html,body{height:auto; overflow:visible; background:var(--bg);
+    -webkit-print-color-adjust:exact; print-color-adjust:exact}
+  #stars,.dots,.prog{display:none!important}
+  .deck{position:static}
+  .slide{position:relative!important; inset:auto!important; width:1920px; height:1080px;
+    opacity:1!important; transform:none!important; display:flex!important;
+    break-after:page; overflow:hidden}
+  .slide:last-child{break-after:auto}
+  .r{opacity:1!important; transform:none!important}
+  .shot img{max-height:600px}
+}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<div class="prog" id="prog"></div>
+<nav class="dots" id="dots" aria-label="Slides"></nav>
+
+<div class="deck" id="deck">
+
+  <!-- 1 — CAPA -->
+  <section class="slide cover active">
+    <img class="logo-xl r" src="../logo.png" alt="WhereItFalls logo">
+    <div class="eyebrow r">FIAP Global Solution · Space Connect</div>
+    <h1 class="r">Where<span>It</span>Falls</h1>
+    <p class="sub r">Alerta de queda de detritos espaciais para defesa civil, aviação e população.</p>
+    <div class="meta">
+      VÍDEO-PITCH · ~3 MIN<br>
+      ECONOMIA ESPACIAL · COBERTURA GLOBAL, FOCO BRASIL
+    </div>
+    <svg class="orbit" viewBox="0 0 520 520" fill="none" aria-hidden="true">
+      <ellipse cx="260" cy="260" rx="210" ry="78" stroke="rgba(255,255,255,.12)" stroke-width="1.2" transform="rotate(-24 260 260)"/>
+      <circle cx="260" cy="300" r="118" stroke="rgba(61,214,196,.25)" stroke-width="1"/>
+      <path d="M70 150 Q220 230 360 430" stroke="#F0A202" stroke-width="2.4" stroke-dasharray="2 7" stroke-linecap="round"/>
+      <circle cx="360" cy="430" r="7" fill="#F0A202"/>
+      <circle cx="360" cy="430" r="20" stroke="#F0A202" stroke-width="1.4" opacity=".55"/>
+      <line x1="360" y1="402" x2="360" y2="458" stroke="#F0A202" stroke-width="1"/>
+      <line x1="332" y1="430" x2="388" y2="430" stroke="#F0A202" stroke-width="1"/>
+    </svg>
+  </section>
+
+  <!-- 2 — PROBLEMA -->
+  <section class="slide">
+    <div class="eyebrow r">O problema</div>
+    <h2 class="r">Tudo que sobe acaba descendo, e em volume cada vez maior.</h2>
+    <div class="stats">
+      <div class="stat r"><div class="n">&gt;3<span style="font-size:1.4rem">/dia</span></div><div class="l">objetos intactos reentram na atmosfera, em ritmo crescente (ESA, 2024)</div></div>
+      <div class="stat r"><div class="n">~2<span style="font-size:1.4rem">/sem</span></div><div class="l">corpos de foguete reentram sem controle; 2.300+ ainda esperam em órbita</div></div>
+      <div class="stat r"><div class="n">20–40%</div><div class="l">da massa sobrevive ao calor da reentrada e chega ao solo</div></div>
+    </div>
+    <p class="lead r" style="margin-top:34px">As megaconstelações são desativadas ao fim da vida útil e caem. O volume aumenta a cada ano, e ninguém avisa quem está embaixo.</p>
+    <p class="src r">Fontes: <b>ESA Space Environment Report 2025</b> · <b>Scientific Reports 2024</b> (Pardini &amp; Anselmo, PMC11757734) · <b>Nature Astronomy 2022</b> (arXiv:2210.02188).</p>
+  </section>
+
+  <!-- 2b — CRESCENTE -->
+  <section class="slide">
+    <div class="eyebrow r">O ritmo aumenta</div>
+    <h2 class="r">E a cada ano, mais coisa cai.</h2>
+    <div class="stats">
+      <div class="stat r"><div class="n">115 → 950</div><div class="l">reentradas de satélite por ano, de 2019 a 2024 (8x em cinco anos)</div></div>
+      <div class="stat r"><div class="n">~80 → 263</div><div class="l">lançamentos orbitais por ano, comparando 2010–2014 com 2024</div></div>
+      <div class="stat r"><div class="n">490 t</div><div class="l">de massa reentraram em 2024, recorde histórico</div></div>
+    </div>
+    <p class="lead r" style="margin-top:34px">Mais lançamentos significam mais satélites no fim da vida e mais reentradas. A tendência não se inverte tão cedo.</p>
+    <p class="src r">Fontes: <b>MIT Technology Review</b> 2024 (Jonathan McDowell, Harvard-Smithsonian) para reentradas e lançamentos · <b>ESA</b> / workshop ESTEC 2025 para a massa reentrada.</p>
+  </section>
+
+  <!-- 3 — RISCO -->
+  <section class="slide">
+    <div class="eyebrow r">O risco é mensurável</div>
+    <h2 class="r">O risco já está medido: pessoas no solo e aviação.</h2>
+    <div class="stats">
+      <div class="stat r"><div class="n">~10%</div><div class="l">de chance de 1+ <b style="color:var(--text)">vítima no solo</b> por queda de detrito de foguete na próxima década</div></div>
+      <div class="stat r"><div class="n">645</div><div class="l"><b style="color:var(--text)">voos atrasados</b> quando Espanha e França fecharam o espaço aéreo (nov/2022)</div></div>
+      <div class="stat r"><div class="n">~26%<span style="font-size:1.4rem">/ano</span></div><div class="l">de uma reentrada cruzar <b style="color:var(--text)">espaço aéreo movimentado</b></div></div>
+    </div>
+    <p class="lead r" style="margin-top:34px">São dois riscos distintos: gente no solo e aviação. Fechar espaço aéreo custa caro mesmo sem impacto; o risco já é operacional.</p>
+    <p class="src r">Risco de vítima: <b>Nature Astronomy 2022</b> (Byers, Wright &amp; Boley); estimativa elevada a 20–29% em revisão de 2024. Voos e espaço aéreo: <b>Scientific Reports 2025</b> (Wright, Boley &amp; Byers, DOI 10.1038/s41598-024-84001-2).</p>
+  </section>
+
+  <!-- 3b — BRASIL: JÁ CAIU AQUI -->
+  <section class="slide">
+    <div class="eyebrow r">Brasil · já está caindo aqui</div>
+    <h2 class="r">No Brasil o risco é ainda maior, e já virou realidade.</h2>
+    <div class="stats">
+      <div class="stat r"><div class="n">~3x</div><div class="l">mais risco de impacto na faixa equatorial (onde está o Brasil) que em NY, Pequim ou Moscou</div></div>
+      <div class="stat r"><div class="n">2012</div><div class="l">Maranhão: esfera de ~50&nbsp;kg de um Ariane 44L abriu cratera de 1&nbsp;m num quintal</div></div>
+      <div class="stat r"><div class="n">2022</div><div class="l">Paraná: fragmento de ~4&nbsp;m de um Falcon 9, <b style="color:var(--text)">confirmado pela AEB</b></div></div>
+    </div>
+    <p class="lead r" style="margin-top:34px">Reentradas visíveis sobre MT, GO, DF, MG e BA (mai/2025) e o Long March 7A (out/2025), <b style="color:var(--text)">sem nenhum alerta do DECEA</b>. Quem está embaixo não é avisado.</p>
+    <p class="src r">Fontes: <b>Nature Astronomy 2022</b> (faixa de latitude) · <b>AEB</b> / Gazeta do Povo (Paraná 2022) · Space.com (Maranhão 2012) · <b>BRAMON</b> / Correio Braziliense (reentradas 2025).</p>
+  </section>
+
+  <!-- 4 — LACUNA -->
+  <section class="slide">
+    <div class="eyebrow r">A lacuna</div>
+    <div class="two">
+      <div>
+        <h2 class="r">Cuidam da colisão lá em cima.<br>Ninguém avisa o solo.</h2>
+        <p class="lead r">Aerospace CORDS, ESA e Space-Track existem, mas são <b style="color:var(--text)">para especialista</b>: dado cru, em inglês, alguns com login do governo dos EUA. Não têm índice de risco, camada de aeroportos nem alerta por e-mail. <b style="color:var(--text)">Nenhuma ferramenta pública em português.</b></p>
+        <p class="src r">Fontes: Aerospace CORDS · ESA Reentry Portal · Space-Track / 18 SDS (TIP).</p>
+      </div>
+      <div class="cards">
+        <div class="card r"><div class="k">Em órbita (lotado)</div><h3>LeoLabs · Slingshot · Stargaze</h3><p>SSA enterprise/defesa, foco em evitar colisão entre satélites. Caro, B2B.</p></div>
+        <div class="card r"><div class="k">No solo (vazio)</div><h3>WhereItFalls</h3><p>Traduz a reentrada em risco regional acionável para aviação, defesa civil e seguro. Cobertura global, acessível, com foco inicial no Brasil.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 — SOLUÇÃO / POSICIONAMENTO -->
+  <section class="slide">
+    <div class="eyebrow r">A solução</div>
+    <p class="quote r">Eles evitam colisão <span class="sig">lá em cima</span>.<br>WhereItFalls avisa <span class="amber">quem está embaixo</span>.</p>
+    <p class="lead r" style="margin-top:34px">Uma plataforma que consome previsões de reentrada, calcula o <b style="color:var(--text)">corredor de risco no solo</b> e dispara alertas (mapa de calor, e-mail e webhook) para regiões, aeroportos e órgãos sob a faixa de incerteza. É ferramenta de decisão, sem alarmismo.</p>
+  </section>
+
+  <!-- 6 — COMO FUNCIONA -->
+  <section class="slide">
+    <div class="eyebrow r">Como funciona</div>
+    <h2 class="r">Do dado orbital ao alerta no chão.</h2>
+    <div class="pipe">
+      <div class="step r"><div class="i">01 · INGEST</div><h4>Previsão</h4><p>Space-Track TIP + CelesTrak + Aerospace CORDS. Dado-fonte gratuito.</p></div>
+      <div class="step r"><div class="i">02 · ÓRBITA</div><h4>Ground-track</h4><p>skyfield propaga a órbita na janela de incerteza → trilha no solo.</p></div>
+      <div class="step r"><div class="i">03 · RISCO</div><h4>Corredor</h4><p>shapely + PostGIS cruzam o corredor com aeroportos e regiões → <b style="color:var(--text)">índice 0–100 + tier</b>.</p></div>
+      <div class="step r"><div class="i">04 · ALERTA</div><h4>Ação</h4><p>Mapa, globo 3D, e-mail e webhook para quem está sob a faixa.</p></div>
+    </div>
+    <p class="lead r" style="margin-top:36px"><span class="mono sig">Python · FastAPI · skyfield · PostGIS · React · globo 3D</span></p>
+  </section>
+
+  <!-- 6b — PRODUTO: MAPA -->
+  <section class="slide">
+    <div class="eyebrow r">O produto · protótipo funcional</div>
+    <h2 class="r" style="margin-bottom:20px">Do dado orbital ao corredor no mapa.</h2>
+    <div class="shot r"><img src="assets/shots/dashboard-map.png" alt="WhereItFalls — mapa do corredor de risco com índice por região"></div>
+    <div class="chips r" style="margin-top:22px">
+      <div class="chip"><b>Índice 0–100</b> + tier por região</div>
+      <div class="chip"><b>Corredor</b> de risco sobre o território</div>
+      <div class="chip"><b>Exposição</b> · aeroportos e regiões sob a faixa</div>
+      <div class="chip"><b>Dados reais</b> · Space-Track ao vivo</div>
+    </div>
+  </section>
+
+  <!-- 6c — PRODUTO: GLOBO -->
+  <section class="slide">
+    <div class="eyebrow r">O produto · visão orbital</div>
+    <h2 class="r" style="margin-bottom:20px">Globo 3D, contagem regressiva, foco no evento.</h2>
+    <div class="shot r"><img src="assets/shots/dashboard-globe.png" alt="WhereItFalls — globo 3D com órbita, ground-track e ponto de impacto"></div>
+    <div class="chips r" style="margin-top:22px">
+      <div class="chip"><b>Órbita + ground-track</b> varrendo o planeta</div>
+      <div class="chip"><b>Contagem regressiva</b> até a reentrada</div>
+      <div class="chip"><b>Foco por evento</b> · alterna mapa ↔ globo</div>
+    </div>
+  </section>
+
+  <!-- 7 — MERCADO + CLIENTES -->
+  <section class="slide">
+    <div class="eyebrow r">Mercado &amp; clientes</div>
+    <h2 class="r">Demanda real, dado de custo quase zero.</h2>
+    <div class="stats">
+      <div class="stat r"><div class="n">US$ 1,7–5 bi</div><div class="l">mercado de Space Situational Awareness (2025 → 2034), CAGR ~7–10%</div></div>
+      <div class="stat r"><div class="n">~0</div><div class="l">custo de dado-fonte (Space-Track / CelesTrak / CORDS são gratuitos) → margem alta</div></div>
+      <div class="stat r"><div class="n">B2G+B2B</div><div class="l">compradores já contratam SSA comercial (US Office of Space Commerce, UK Space Agency)</div></div>
+    </div>
+    <div class="chips r">
+      <div class="chip"><b>Defesa civil</b> · DECEA · FAB</div>
+      <div class="chip"><b>Aviação</b> · companhias · aeroportos</div>
+      <div class="chip"><b>Seguradoras</b> · underwriting de risco</div>
+      <div class="chip"><b>Marítimo</b> · portos · rotas</div>
+    </div>
+  </section>
+
+  <!-- 8 — MODELO DE NEGÓCIO -->
+  <section class="slide">
+    <div class="eyebrow r">Modelo de negócio</div>
+    <h2 class="r">API freemium.</h2>
+    <div class="tiers">
+      <div class="tier r"><div class="nm">Free</div><h4>Público</h4><p>Reentradas previstas, risco por região, mapa de calor, histórico. Bem social + adoção.</p></div>
+      <div class="tier feat r"><div class="nm">Pro</div><h4>Aviação / Defesa civil</h4><p>Assinatura de alerta (e-mail/webhook), SLA, alerta por região. DECEA, aeroportos, companhias.</p></div>
+      <div class="tier r"><div class="nm">Insurance</div><h4>Seguradoras</h4><p>Score por ativo/apólice + analytics histórico + incerteza detalhada para subscrição.</p></div>
+    </div>
+  </section>
+
+  <!-- 9 — IMPACTO -->
+  <section class="slide">
+    <div class="eyebrow r">Impacto</div>
+    <h2 class="r">Um problema espacial com consequências bem terrestres.</h2>
+    <ul class="ul">
+      <li class="r"><span class="mk">▸</span><span class="t"><b>Segurança</b> de passageiros e de quem está no solo: o aviso que FAA/UNOOSA/IAA pedem e não existe acessível.</span></li>
+      <li class="r"><span class="mk">▸</span><span class="t"><b>Equidade</b>: corpos de foguete têm ~3x mais chance de cair nas latitudes de Jakarta, Lagos e <b style="color:var(--text)">do Brasil</b> que nas de NY ou Moscou; as potências espaciais exportam o risco ao Sul Global. <b style="color:var(--text)">A cobertura é global; o Brasil é o primeiro caso de uso.</b></span></li>
+      <li class="r"><span class="mk">▸</span><span class="t"><b>Acesso</b>: tier público grátis democratiza um alerta hoje trancado em silos de defesa.</span></li>
+    </ul>
+  </section>
+
+  <!-- 10 — VISÃO / ROADMAP -->
+  <section class="slide">
+    <div class="eyebrow r">Visão</div>
+    <h2 class="r">Do protótipo à malha de alerta operacional.</h2>
+    <div class="pipe" style="grid-template-columns:repeat(3,1fr)">
+      <div class="step r"><div class="i">HOJE</div><h4>Protótipo funcional</h4><p>Dados globais (Space-Track), corredor + índice 0–100, mapa e globo 3D, alerta por e-mail/webhook.</p></div>
+      <div class="step r"><div class="i">PRÓXIMO</div><h4>B2B</h4><p>Webhooks, tier seguradoras, integração com despacho aéreo e defesa civil.</p></div>
+      <div class="step r"><div class="i">VISÃO</div><h4>Operação com SLA</h4><p>Rede de alerta com SLA + parcerias com autoridades de aviação e defesa civil.</p></div>
+    </div>
+  </section>
+
+  <!-- 11 — FECHAMENTO -->
+  <section class="slide cover">
+    <img class="logo-xl r" src="../logo.png" alt="WhereItFalls logo">
+    <h1 class="r">Where<span style="color:var(--amber)">It</span>Falls</h1>
+    <p class="sub r">O céu está mais cheio. Alguém precisa avisar o chão.</p>
+    <div class="group r">
+      <div class="member"><div class="avatar"><img src="assets/team/murilo.jpeg" alt="Murilo"></div><div class="name">Murilo Alves<br>de Moura</div><div class="rm">RM 98220</div></div>
+      <div class="member"><div class="avatar"><img src="assets/team/freitas.jpeg" alt="Gabriel"></div><div class="name">Gabriel Da Silva<br>Freitas</div><div class="rm">RM 551195</div></div>
+      <div class="member"><div class="avatar"><img src="assets/team/mateus.jpeg" alt="Mateus"></div><div class="name">Mateus<br>Vicente</div><div class="rm">RM 550521</div></div>
+      <div class="member"><div class="avatar"><img src="assets/team/roberto.jpeg" alt="Roberto"></div><div class="name">Roberto Felix de<br>Araújo Guedes</div><div class="rm">RM 99976</div></div>
+      <div class="member"><div class="avatar"><img src="assets/team/felipe.jpeg" alt="Felipe"></div><div class="name">Felipe Neves<br>Cavalcanti</div><div class="rm">RM 551619</div></div>
+    </div>
+    <div class="meta">
+      OBRIGADO · FIAP GS — SPACE CONNECT<br>
+      <span class="sig">github.com/badmuriss/whereitfalls</span> · vídeo no entregável
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* ===========================================================================
+   Controller do deck: nav por teclado/scroll/touch/dots, progresso, dots.
+   =========================================================================== */
+const deck = document.getElementById('deck');
+const slides = [...deck.querySelectorAll('.slide')];
+const dotsWrap = document.getElementById('dots');
+const prog = document.getElementById('prog');
+let i = 0, lock = false;
+
+slides.forEach((_, n) => {
+  const b = document.createElement('button');
+  b.setAttribute('aria-label', 'Ir ao slide ' + (n+1));
+  b.addEventListener('click', () => go(n));
+  dotsWrap.appendChild(b);
+});
+const dots = [...dotsWrap.children];
+
+function render(){
+  slides.forEach((s,n)=>s.classList.toggle('active', n===i));
+  dots.forEach((d,n)=>d.classList.toggle('on', n===i));
+  prog.style.width = ((i)/(slides.length-1))*100 + '%';
+}
+function go(n){
+  n = Math.max(0, Math.min(slides.length-1, n));
+  if(n===i) return;
+  i = n; render();
+}
+function next(){ go(i+1) } function prev(){ go(i-1) }
+
+window.addEventListener('keydown', e=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){ e.preventDefault(); next(); }
+  else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){ e.preventDefault(); prev(); }
+  else if(e.key==='Home'){ go(0); } else if(e.key==='End'){ go(slides.length-1); }
+  else if(e.key.toLowerCase()==='f'){ if(!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
+});
+let wheelT=0;
+window.addEventListener('wheel', e=>{
+  const now=Date.now(); if(now-wheelT<700) return; if(Math.abs(e.deltaY)<24) return;
+  wheelT=now; e.deltaY>0 ? next() : prev();
+}, {passive:true});
+let tsY=null;
+window.addEventListener('touchstart', e=>tsY=e.touches[0].clientY, {passive:true});
+window.addEventListener('touchend', e=>{
+  if(tsY===null) return; const dy=tsY-e.changedTouches[0].clientY;
+  if(Math.abs(dy)>50){ dy>0?next():prev(); } tsY=null;
+}, {passive:true});
+
+render();
+
+/* ---------------------------------------------------------------------------
+   Starfield: poucas estrelas, parallax lento. Respeita reduced-motion.
+   --------------------------------------------------------------------------- */
+const cv = document.getElementById('stars'), ctx = cv.getContext('2d');
+let stars=[], W, H, raf, reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+function resize(){
+  W=cv.width=innerWidth; H=cv.height=innerHeight;
+  const n = Math.min(140, Math.floor(W*H/16000));
+  stars = Array.from({length:n}, ()=>({
+    x:Math.random()*W, y:Math.random()*H, z:Math.random()*.8+.2,
+    r:Math.random()*1.3+.2
+  }));
+}
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  for(const s of stars){
+    ctx.globalAlpha = .25 + s.z*.5;
+    ctx.fillStyle = s.r>1.1 ? 'rgba(240,162,2,.9)' : 'rgba(230,234,242,.9)';
+    ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,7); ctx.fill();
+    if(!reduce){ s.y += s.z*.06; if(s.y>H){ s.y=0; s.x=Math.random()*W; } }
+  }
+  ctx.globalAlpha=1;
+  if(!reduce) raf=requestAnimationFrame(draw);
+}
+addEventListener('resize', resize); resize(); draw();
+if(reduce) draw();
+</script>
+</body>
+</html>
