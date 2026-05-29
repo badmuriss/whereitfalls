@@ -12,7 +12,7 @@ Mini-challenge de 15 dias (FIAP GS). Entrega **2026-06-09**. Princípio: entrega
 - Frontend: globo 3D (órbita + corredor) + lista de reentradas + mapa de calor de risco.
 - Alerta por **e-mail** em região assinada.
 - Docker Compose (backend + PostGIS + frontend) rodando local.
-- README + testes essenciais (orbit/risk) + observabilidade (logging + Sentry).
+- README + testes essenciais (orbit/risk) + observabilidade (logging + `/health`).
 
 ### Stretch (se sobrar tempo)
 - **Webhooks** B2B + assinatura HMAC.
@@ -31,7 +31,7 @@ Mini-challenge de 15 dias (FIAP GS). Entrega **2026-06-09**. Princípio: entrega
 | 6–8 | Endpoints API + frontend: globo 3D + mapa de calor | "uau" visual |
 | 9–10 | E-mail + assinaturas; (webhooks se der) | alertas |
 | 11–12 | Polish UI (design system "Mission Control"), heatmap histórico, README | anti-AI |
-| 13 | Testes, Sentry, dockerizar tudo | qualidade |
+| 13 | Testes, observabilidade, dockerizar tudo | qualidade |
 | 14 | Gravar demo (4 min) + vídeo-pitch | entrega |
 | 15 | Buffer / margem | imprevistos |
 
@@ -54,9 +54,11 @@ Mini-challenge de 15 dias (FIAP GS). Entrega **2026-06-09**. Princípio: entrega
 ## Definição de pronto (MVP)
 
 - [ ] `docker compose up` sobe backend + DB + frontend local.
-- [ ] Ingest popula reentradas reais do Space-Track.
-- [ ] `/v1/reentries` e `/v1/risk` retornam dados coerentes.
+- [x] Ingest popula reentradas reais do Space-Track.
+- [x] `/v1/reentries` e `/v1/risk` retornam dados coerentes.
+- [x] Upsert idempotente de objetos/previsões em SQLModel quando DB está disponível.
+- [x] Recompute persiste corredores de risco gerados em SQLModel.
 - [ ] Globo mostra órbita + corredor; heatmap mostra risco sobre BR.
-- [ ] Assinar região e receber e-mail de alerta funciona.
-- [ ] Testes de orbit/risk passam; `/health` ok; Sentry recebendo.
+- [ ] Assinar região e receber e-mail de alerta funciona (simulado/free no MVP acadêmico).
+- [x] Testes de orbit/risk passam; `/health` ok.
 - [ ] README permite rodar do zero.

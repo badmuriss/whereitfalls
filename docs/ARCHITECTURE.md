@@ -50,11 +50,12 @@ Monorepo com backend Python (FastAPI) + frontend React, banco PostgreSQL/PostGIS
 
 | Módulo | Responsabilidade |
 |--------|------------------|
-| `core/` | config (env), conexão DB, logging estruturado, Sentry, scheduler |
+| `core/` | config (env), conexão DB, logging estruturado, scheduler |
 | `models/` | SQLModel: `SpaceObject`, `ReentryPrediction`, `RiskCorridor`, `Region`, `Asset`, `Subscription`, `WebhookEndpoint`, `AlertEvent` |
 | `schemas/` | Pydantic — contratos de entrada/saída da API (type-safe) |
 | `api/` | routers: `reentries`, `risk`, `subscribe`, `webhooks`, `health` |
-| `services/ingest.py` | clientes Space-Track (tip/gp), CelesTrak (TLE), CORDS (histórico); upsert no DB |
+| `services/ingest.py` | cliente Space-Track (TIP/GP); CelesTrak/CORDS entram como próximos incrementos |
+| `services/repository.py` | upsert idempotente SQLModel de objetos/previsões; fallback seguro quando DB indisponível |
 | `services/orbit.py` | skyfield/sgp4 → ground-track na janela de incerteza |
 | `services/risk.py` | shapely (buffer/corredor) + PostGIS (overlay, score) |
 | `services/alerts.py` | matching corredor×assinatura → e-mail + webhook |
@@ -86,6 +87,6 @@ Monorepo com backend Python (FastAPI) + frontend React, banco PostgreSQL/PostGIS
 
 ## Observabilidade & qualidade
 
-- Logging estruturado (JSON) + Sentry (free) + endpoint `/health`.
+- Logging estruturado (JSON) + endpoint `/health`.
 - Testes: pytest (unit dos serviços orbit/risk com fixtures de TLE/previsão conhecidos; contrato dos routers).
 - Type-safety: Pydantic/SQLModel no backend; TypeScript estrito no frontend; OpenAPI gerado → client tipado no front.

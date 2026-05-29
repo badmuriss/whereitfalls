@@ -47,7 +47,6 @@ SPACETRACK_USER=
 SPACETRACK_PASS=
 CELESTRAK_BASE=https://celestrak.org
 DATABASE_URL=postgresql+psycopg://wif:wif@db:5432/whereitfalls
-SENTRY_DSN=
 EMAIL_HOST=
 EMAIL_PORT=587
 EMAIL_USER=

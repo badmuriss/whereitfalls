@@ -15,15 +15,17 @@ REST com FastAPI. OpenAPI/Swagger automático em `/docs`. JSON em tudo. Versiona
 | GET | `/v1/history` | Reentradas históricas (CORDS) para heatmap histórico. |
 | GET | `/health` | Liveness/readiness. |
 
-### Autenticado (tiers pagos — API key)
+### Funcionalidades de demo
 
-| Método | Rota | Tier | Descrição |
-|--------|------|------|-----------|
-| POST | `/v1/subscriptions` | Pago | Cria assinatura de alerta (canal, alvo, limiar). |
-| GET/DELETE | `/v1/subscriptions/{id}` | Pago | Gerencia assinatura. |
-| POST | `/v1/webhooks` | Pago | Registra endpoint webhook (URL, secret). |
-| GET | `/v1/risk/score` | Premium (seguro) | Score detalhado por ativo/apólice + incerteza. |
-| GET | `/v1/history/analytics` | Premium (seguro) | Estatísticas históricas p/ underwriting. |
+Sem pagamento/API key no protótipo da faculdade. Assinaturas são simuladas e gratuitas
+para demonstrar o fluxo ponta a ponta.
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| POST | `/v1/subscriptions` | Cria assinatura simulada de alerta (canal, alvo, limiar). |
+| POST | `/v1/alerts/dispatch` | Avalia assinaturas e dispara/dry-run de alertas. |
+| POST | `/v1/ingest/spacetrack/sync` | Sincroniza Space-Track real para o banco quando disponível. |
+| POST | `/v1/ingest/risk/recompute` | Recalcula e persiste corredores gerados. |
 
 ## Contratos (exemplos)
 
@@ -71,12 +73,12 @@ Webhook payload (POST do WhereItFalls → assinante), assinado com HMAC:
 }
 ```
 
-## Tiers (freemium)
+## Tiers (visão futura, fora do protótipo)
 
 | Tier | Inclui | Público |
 |------|--------|---------|
 | **Free** | leitura de reentradas, risco por região, heatmap, histórico | público, pesquisa, imprensa |
-| **Pro** | assinaturas de alerta (e-mail/webhook), SLA, rate maior | aviação, aeroportos, defesa civil |
+| **Pro** | SLA, rate maior, webhooks e integrações | aviação, aeroportos, defesa civil |
 | **Insurance** | score por ativo/apólice, analytics histórico, incerteza detalhada, export | seguradoras (underwriting) |
 
 ## Convenções
@@ -86,4 +88,4 @@ Webhook payload (POST do WhereItFalls → assinante), assinado com HMAC:
 - Rate limit por API key (tier).
 - Datas sempre UTC ISO-8601.
 - Geo sempre GeoJSON (WGS84 / EPSG:4326).
-- Autenticação por API key (header `X-API-Key`) — auth simples no MVP; OAuth fica para depois.
+- Autenticação por API key fica fora do MVP acadêmico.
