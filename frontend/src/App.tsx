@@ -1,7 +1,7 @@
-import { Activity, Bell, Radar, RadioTower, Send, ShieldAlert } from "lucide-react";
+import { Activity, Radar, RadioTower, ShieldAlert } from "lucide-react";
 import { Suspense, lazy, useEffect, useMemo, useState, type ReactNode } from "react";
 
-import { createEmailSubscription, dispatchAlertDryRun, getReentryDetail, getReentries, getRisk } from "./api/client";
+import { getReentryDetail, getReentries, getRisk } from "./api/client";
 import type { ReentryDetail, ReentrySummary, RiskRegion } from "./api/types";
 import logoUrl from "./assets/whereitfalls-mark.svg";
 import { EventHeader } from "./components/EventHeader";
@@ -40,10 +40,6 @@ export function App() {
   const [detail, setDetail] = useState<ReentryDetail | null>(null);
   // mapa 2D como padrão (leve); globo 3D é opt-in pelo toggle (three.js só carrega ao pedir)
   const [view, setView] = useState<StageView>("map");
-  const [alertRegion, setAlertRegion] = useState("DF");
-  const [alertEmail, setAlertEmail] = useState("ops@defesacivil.gov.br");
-  const [alertStatus, setAlertStatus] = useState("Pronto para simular");
-  const [alertBusy, setAlertBusy] = useState(false);
 
   const now = useNow(1000);
 
@@ -105,36 +101,6 @@ export function App() {
   const maxScore = useMemo(() => contextRisks.reduce((m, r) => Math.max(m, r.score), 0), [contextRisks]);
   const criticalCount = useMemo(() => contextRisks.filter((r) => r.score >= 0.7).length, [contextRisks]);
 
-  // sincroniza região do alerta com o evento focado
-  useEffect(() => {
-    if (leadRisk) setAlertRegion(leadRisk.region);
-    // sincroniza só quando muda a região líder do evento focado
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [leadRisk?.region]);
-
-  async function handleSubscribe() {
-    setAlertBusy(true);
-    try {
-      const sub = await createEmailSubscription({ region: alertRegion, email: alertEmail, minScore: 0 });
-      setAlertStatus(`Política ${sub.id.slice(0, 8)} ativa · ${alertRegion.toUpperCase()}`);
-    } catch {
-      setAlertStatus("Falha ao criar política");
-    } finally {
-      setAlertBusy(false);
-    }
-  }
-
-  async function handleDispatch() {
-    setAlertBusy(true);
-    try {
-      const result = await dispatchAlertDryRun(0);
-      setAlertStatus(`${result.matched} alerta(s) simulado(s) · ${result.evaluated} avaliados`);
-    } catch {
-      setAlertStatus("Falha ao simular alertas");
-    } finally {
-      setAlertBusy(false);
-    }
-  }
 
   return (
     <div className="app">
@@ -211,40 +177,13 @@ export function App() {
           <Legend />
         </main>
 
-        <aside className="rail rail--right" aria-label="Exposição e alerta">
+        <aside className="rail rail--right" aria-label="Exposição no solo">
           <section className="panel">
             <div className="panel__head">
               <ShieldAlert size={15} strokeWidth={1.75} />
               <span>Exposição no solo</span>
             </div>
             {state.loading ? <Skeleton rows={4} /> : <ExposurePanel regions={focusedRegions} />}
-          </section>
-
-          <section className="panel alert-panel">
-            <div className="panel__head">
-              <Bell size={15} strokeWidth={1.75} />
-              <span>Política de alerta</span>
-            </div>
-            <div className="alert-form">
-              <label>
-                <span>Região monitorada</span>
-                <input value={alertRegion} maxLength={6} onChange={(e) => setAlertRegion(e.target.value.toUpperCase())} />
-              </label>
-              <label>
-                <span>Destinatário</span>
-                <input type="email" value={alertEmail} onChange={(e) => setAlertEmail(e.target.value)} />
-              </label>
-              <div className="alert-actions">
-                <button type="button" className="btn btn--ghost" onClick={handleSubscribe} disabled={alertBusy || !alertEmail}>
-                  Salvar política
-                </button>
-                <button type="button" className="btn btn--solid" onClick={handleDispatch} disabled={alertBusy}>
-                  <Send size={14} strokeWidth={1.9} />
-                  Simular envio
-                </button>
-              </div>
-              <output className="alert-status">{alertStatus}</output>
-            </div>
           </section>
         </aside>
       </div>

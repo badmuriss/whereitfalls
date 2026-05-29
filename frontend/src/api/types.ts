@@ -56,31 +56,3 @@ export interface RiskResponse {
   items: RiskRegion[];
   total: number;
 }
-
-export interface SubscriptionResponse {
-  id: string;
-  channel: "email" | "webhook";
-  target: {
-    type: "region" | "bbox";
-    region?: string | null;
-    bbox?: [number, number, number, number] | null;
-  };
-  min_score: number;
-  status: "active";
-}
-
-export interface AlertDispatchResponse {
-  evaluated: number;
-  matched: number;
-  sent: number;
-  events: Array<{
-    subscription_id: string;
-    prediction_id: string;
-    region: string;
-    score: number;
-    status: string;
-    provider: string | null;
-    message_id: string | null;
-    detail: string;
-  }>;
-}
