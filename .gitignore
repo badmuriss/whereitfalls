@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Node / frontend
+node_modules/
+dist/
+.vite/
+*.local
+playwright-report/
+test-results/
+
+# Data (large / generated)
+data/cache/
+tmp/
+data/*.tif
+data/*.tiff
+*.sqlite
+*.db
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.log
+
+# Secrets
+*.pem
+secrets/
+
+# Deck: tooling de build local (depende de Playwright + app rodando)
+docs/build-deck.cjs
+docs/build_pdf.sh
+
+# Code graph (local)
+.code-review-graph/
