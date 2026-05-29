@@ -1,0 +1,14 @@
+<svg width="220" height="150" viewBox="0 0 220 150" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">WhereItFalls</title>
+  <desc id="desc">Arco de reentrada cruzando o horizonte até um retículo de impacto.</desc>
+  <path d="M3 88C39 68 83 58 135 58C163 58 190 63 217 76" stroke="#3DD6C4" stroke-width="3.2" stroke-linecap="round" opacity=".66"/>
+  <path d="M36 18C94 26 148 58 190 124" stroke="#F0A202" stroke-width="7.2" stroke-linecap="round"/>
+  <path d="M36 18C94 26 148 58 190 124" stroke="#FFB21A" stroke-width="2.8" stroke-linecap="round"/>
+  <circle cx="36" cy="18" r="9" fill="#F0A202"/>
+  <g transform="translate(147 88)" stroke="#F0A202" stroke-linecap="round">
+    <circle cx="30" cy="30" r="25" stroke-width="6"/>
+    <path d="M30 0V20M30 40v20M0 30h20M40 30h20" stroke-width="7"/>
+    <path d="M15 18 30 30" stroke-width="4.5"/>
+    <circle cx="30" cy="30" r="9" fill="#F0A202" stroke="none"/>
+  </g>
+</svg>

@@ -1,0 +1,22 @@
+<svg width="620" height="150" viewBox="0 0 620 150" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">WhereItFalls</title>
+  <desc id="desc">Reentry arc crossing a planetary horizon into a targeting reticle.</desc>
+  <rect width="620" height="150" fill="#06080F"/>
+  <g transform="translate(14 16)">
+    <path d="M0 76C40 55 88 45 146 45C202 45 252 55 296 76" stroke="#3DD6C4" stroke-width="2.7" stroke-linecap="round" opacity=".64"/>
+    <path d="M42 3C111 11 175 43 236 112" stroke="#F0A202" stroke-width="6" stroke-linecap="round"/>
+    <path d="M42 3C111 11 175 43 236 112" stroke="#FFB21A" stroke-width="2.4" stroke-linecap="round"/>
+    <circle cx="42" cy="3" r="7.5" fill="#F0A202"/>
+    <g transform="translate(213 70)" stroke="#F0A202" stroke-linecap="round">
+      <circle cx="38" cy="38" r="30" stroke-width="5"/>
+      <path d="M38 0V25M38 51v25M0 38h25M51 38h25" stroke-width="6"/>
+      <path d="M21 23 38 38" stroke-width="4"/>
+      <circle cx="38" cy="38" r="10" fill="#F0A202" stroke="none"/>
+    </g>
+  </g>
+  <g transform="translate(320 44)">
+    <text x="0" y="36" fill="#E6EAF2" font-family="Cabinet Grotesk, Geist, system-ui, sans-serif" font-size="38" font-weight="740" letter-spacing="0">WhereItFalls</text>
+    <text x="2" y="62" fill="#8A93A6" font-family="JetBrains Mono, ui-monospace, monospace" font-size="10.5" letter-spacing="1.2">REENTRY RISK INTELLIGENCE</text>
+    <path d="M2 73h152" stroke="#F0A202" stroke-width="2.2" stroke-linecap="round"/>
+  </g>
+</svg>
