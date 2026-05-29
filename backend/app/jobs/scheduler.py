@@ -4,7 +4,6 @@ import logging
 from apscheduler.schedulers.background import BackgroundScheduler
 
 from app.core.config import Settings
-from app.services.alert_dispatch import dispatch_region_alerts
 from app.services.ingestion_sync import sync_spacetrack_ingest
 from app.services.risk_recompute import recompute_stored_risk_corridors
 
@@ -40,14 +39,6 @@ def recompute_risk(settings: Settings) -> None:
     )
 
 
-def dispatch_alerts(settings: Settings) -> None:
-    result = asyncio.run(dispatch_region_alerts(settings, dry_run=False))
-    logger.info(
-        "dispatch_alerts_completed",
-        extra={"matched": result.matched, "sent": result.sent},
-    )
-
-
 def build_scheduler(settings: Settings) -> BackgroundScheduler:
     scheduler = BackgroundScheduler(timezone="UTC")
     scheduler.add_job(
@@ -62,13 +53,6 @@ def build_scheduler(settings: Settings) -> BackgroundScheduler:
         "interval",
         hours=settings.ingest_interval_hours,
         id="recompute_risk",
-        args=[settings],
-    )
-    scheduler.add_job(
-        dispatch_alerts,
-        "interval",
-        minutes=30,
-        id="dispatch_alerts",
         args=[settings],
     )
     return scheduler

@@ -83,10 +83,10 @@ def test_subscription_and_alert_event_persistence(tmp_path) -> None:
     assert init_database(settings) is True
     subscription = create_subscription(
         settings,
-        channel="email",
+        channel="webhook",
         region="df",
         min_score=0.4,
-        email="ops@example.com",
+        webhook_id="wh_test",
     )
     assert subscription is not None
     assert subscription.id is not None

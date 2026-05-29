@@ -11,12 +11,6 @@ class Settings(BaseSettings):
     spacetrack_user: str | None = None
     spacetrack_pass: str | None = None
     celestrak_base: AnyHttpUrl = "https://celestrak.org"
-    email_host: str | None = None
-    email_port: int = 587
-    email_user: str | None = None
-    email_pass: str | None = None
-    email_from: str = "alertas@whereitfalls.app"
-    resend_api_key: str | None = None
     ingest_interval_hours: int = Field(default=6, ge=1, le=24)
 
     model_config = SettingsConfigDict(

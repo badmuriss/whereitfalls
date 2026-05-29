@@ -77,10 +77,9 @@ class SubscriptionTarget(BaseModel):
 
 
 class SubscriptionCreate(BaseModel):
-    channel: Literal["email", "webhook"]
+    channel: Literal["webhook"] = "webhook"
     target: SubscriptionTarget
     min_score: float = Field(ge=0, le=1)
-    email: str | None = None
     webhook_id: str | None = None
 
 
@@ -90,20 +89,6 @@ class SubscriptionResponse(BaseModel):
     target: SubscriptionTarget
     min_score: float
     status: Literal["active"]
-
-
-class AlertEmailTestRequest(BaseModel):
-    to_email: str
-    region: str = "DF"
-    score: float = Field(default=0.78, ge=0, le=1)
-    dry_run: bool = True
-
-
-class AlertEmailTestResponse(BaseModel):
-    provider: Literal["resend", "smtp", "not_configured"]
-    sent: bool
-    message_id: str | None = None
-    detail: str
 
 
 class IngestSyncResponse(BaseModel):
@@ -119,26 +104,3 @@ class RiskRecomputeResponse(BaseModel):
     stored_corridors: int
     database_available: bool
     detail: str = ""
-
-
-class AlertDispatchRequest(BaseModel):
-    dry_run: bool = True
-    min_score: float = Field(default=0, ge=0, le=1)
-
-
-class AlertDispatchItem(BaseModel):
-    subscription_id: str
-    prediction_id: str
-    region: str
-    score: float
-    status: str
-    provider: str | None = None
-    message_id: str | None = None
-    detail: str = ""
-
-
-class AlertDispatchResponse(BaseModel):
-    evaluated: int
-    matched: int
-    sent: int
-    events: list[AlertDispatchItem]

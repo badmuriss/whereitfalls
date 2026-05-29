@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import alerts, health, ingest, reentries, risk, subscriptions
+from app.api import health, ingest, reentries, risk, subscriptions
 from app.core.config import get_settings
 from app.core.database import init_database
 from app.core.errors import register_error_handlers
@@ -45,7 +45,6 @@ def create_app() -> FastAPI:
     app.include_router(reentries.router)
     app.include_router(risk.router)
     app.include_router(subscriptions.router)
-    app.include_router(alerts.router)
     app.include_router(ingest.router)
     return app
 

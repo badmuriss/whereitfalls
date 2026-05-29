@@ -13,8 +13,6 @@ def create_region_subscription(
     payload: SubscriptionCreate,
     settings: Settings = Depends(get_settings),
 ) -> SubscriptionResponse:
-    if payload.channel == "email" and not payload.email:
-        raise AppError("email_required", "Email subscriptions require an email address.")
     if payload.channel == "webhook" and not payload.webhook_id:
         raise AppError("webhook_required", "Webhook subscriptions require a webhook_id.")
     if payload.target.type == "region" and not payload.target.region:
@@ -24,7 +22,6 @@ def create_region_subscription(
         channel=payload.channel,
         region=payload.target.region or "BR",
         min_score=payload.min_score,
-        email=payload.email,
         webhook_id=payload.webhook_id,
     )
     if subscription is None or subscription.id is None:

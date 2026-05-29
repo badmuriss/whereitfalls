@@ -29,33 +29,19 @@ def test_risk_heatmap_contract() -> None:
     assert response.json()["type"] == "FeatureCollection"
 
 
-def test_email_alert_dry_run_contract() -> None:
+def test_webhook_subscription_contract() -> None:
     client = TestClient(create_app())
     response = client.post(
-        "/v1/alerts/email/test",
-        json={"to_email": "ops@example.com", "region": "DF", "score": 0.72},
-    )
-
-    assert response.status_code == 200
-    assert response.json()["sent"] is False
-
-
-def test_dispatch_alerts_contract() -> None:
-    client = TestClient(create_app())
-    subscription = client.post(
         "/v1/subscriptions",
         json={
-            "channel": "email",
+            "channel": "webhook",
             "target": {"type": "region", "region": "DF"},
             "min_score": 0.1,
-            "email": "ops@example.com",
+            "webhook_id": "wh_test",
         },
     )
-    response = client.post(
-        "/v1/alerts/dispatch",
-        json={"dry_run": True, "min_score": 0.1},
-    )
 
-    assert subscription.status_code == 201
-    assert response.status_code == 200
-    assert {"evaluated", "matched", "sent", "events"} <= set(response.json())
+    assert response.status_code == 201
+    body = response.json()
+    assert body["channel"] == "webhook"
+    assert body["status"] == "active"
