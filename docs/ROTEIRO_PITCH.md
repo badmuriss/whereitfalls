@@ -54,7 +54,7 @@
 
 ### [1:34 — Como funciona]
 [Slide Como funciona — pipeline]
-> Quatro passos: **ingere** a previsão de fontes gratuitas como o Space-Track; **propaga** a órbita na janela de incerteza pra traçar a trilha no solo; calcula o **corredor de risco** cruzando com aeroportos e regiões; e **alerta** — mapa de calor, e-mail e webhook. Tudo com dado de custo praticamente zero.
+> Quatro passos: **ingere** a previsão de fontes gratuitas como o Space-Track; **propaga** a órbita na janela de incerteza pra traçar a trilha no solo; calcula o **corredor de risco** cruzando com aeroportos e regiões; e **alerta** via mapa de calor e webhook. Tudo com dado de custo praticamente zero.
 
 ### [1:58 — Mercado + clientes]
 [Slide Mercado]

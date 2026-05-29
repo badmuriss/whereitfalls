@@ -33,9 +33,9 @@ Monorepo com backend Python (FastAPI) + frontend React, banco PostgreSQL/PostGIS
                     ▼                                     ▼
         ┌────────────────────┐                ┌────────────────────────┐
         │ FastAPI (REST)     │                │ alerts.py              │
-        │ /reentries /risk   │                │  e-mail (SMTP/SendGrid)│
-        │ /subscribe /webhook│                │  webhook (httpx POST)  │
-        │ /health  + Swagger │                │  dispara em corredor   │
+        │ /reentries /risk   │                │  webhook (httpx POST)  │
+        │ /subscriptions     │                │  payload assinado HMAC │
+        │ /health  + Swagger │                │  corredor ∩ assinatura │
         └─────────┬──────────┘                │  ∩ região assinada     │
                   │ JSON                        └────────────────────────┘
                   ▼
@@ -58,8 +58,8 @@ Monorepo com backend Python (FastAPI) + frontend React, banco PostgreSQL/PostGIS
 | `services/repository.py` | upsert idempotente SQLModel de objetos/previsões; fallback seguro quando DB indisponível |
 | `services/orbit.py` | skyfield/sgp4 → ground-track na janela de incerteza |
 | `services/risk.py` | shapely (buffer/corredor) + PostGIS (overlay, score) |
-| `services/alerts.py` | matching corredor×assinatura → e-mail + webhook |
-| `jobs/` | tarefas APScheduler: `pull_predictions`, `recompute_risk`, `dispatch_alerts` |
+| `services/alerts.py` | webhook assinado (HMAC) para assinatura cujo corredor cruza a região |
+| `jobs/` | tarefas APScheduler: `pull_predictions`, `recompute_risk` |
 
 ## Modelo de dados (núcleo, rascunho)
 
@@ -68,15 +68,15 @@ Monorepo com backend Python (FastAPI) + frontend React, banco PostgreSQL/PostGIS
 - **RiskCorridor**: prediction_id, geometria (LINESTRING/POLYGON, PostGIS), gerado_em.
 - **Region**: nome, tipo (estado/município/FIR), geometria (POLYGON), população.
 - **Asset**: nome, tipo (aeroporto/porto/cidade), ponto (POINT), peso de exposição.
-- **Subscription**: canal (email/webhook), alvo (region_id/bbox), limiar de risco.
+- **Subscription**: canal (webhook), alvo (region_id/bbox), limiar de risco.
 - **AlertEvent**: prediction_id, subscription_id, score, enviado_em, status.
 
 ## Fluxo de execução
 
 1. `pull_predictions` (scheduler, a cada N h) → `ingest` busca TIP/GP/CORDS → upsert.
 2. Para cada previsão nova/atualizada → `orbit` gera ground-track → `risk` gera corredor + score por região/ativo (PostGIS).
-3. `dispatch_alerts` compara corredores com assinaturas; acima do limiar → `alerts` envia e-mail/webhook e grava `AlertEvent`.
-4. Frontend consome `/reentries` e `/risk` para globo 3D + heatmap; assinaturas via `/subscribe`.
+3. Assinaturas (canal webhook) registram região + limiar; quando um corredor cruza a região acima do limiar, `alerts` envia webhook assinado e grava `AlertEvent`.
+4. Frontend consome `/reentries` e `/risk` para globo 3D + heatmap; assinaturas via `/subscriptions`.
 
 ## Decisões técnicas
 

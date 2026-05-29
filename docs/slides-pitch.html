@@ -295,7 +295,7 @@ h2{font-family:var(--display); font-weight:600; font-size:clamp(2rem,4.2vw,3.4re
     <div class="two">
       <div>
         <h2 class="r">Cuidam da colisão lá em cima.<br>Ninguém avisa o solo.</h2>
-        <p class="lead r">Aerospace CORDS, ESA e Space-Track existem, mas são <b style="color:var(--text)">para especialista</b>: dado cru, em inglês, alguns com login do governo dos EUA. Não têm índice de risco, camada de aeroportos nem alerta por e-mail. <b style="color:var(--text)">Nenhuma ferramenta pública em português.</b></p>
+        <p class="lead r">Aerospace CORDS, ESA e Space-Track existem, mas são <b style="color:var(--text)">para especialista</b>: dado cru, em inglês, alguns com login do governo dos EUA. Não têm índice de risco, camada de aeroportos nem alerta acionável. <b style="color:var(--text)">Nenhuma ferramenta pública em português.</b></p>
         <p class="src r">Fontes: Aerospace CORDS · ESA Reentry Portal · Space-Track / 18 SDS (TIP).</p>
       </div>
       <div class="cards">
@@ -309,7 +309,7 @@ h2{font-family:var(--display); font-weight:600; font-size:clamp(2rem,4.2vw,3.4re
   <section class="slide">
     <div class="eyebrow r">A solução</div>
     <p class="quote r">Eles evitam colisão <span class="sig">lá em cima</span>.<br>WhereItFalls avisa <span class="amber">quem está embaixo</span>.</p>
-    <p class="lead r" style="margin-top:34px">Uma plataforma que consome previsões de reentrada, calcula o <b style="color:var(--text)">corredor de risco no solo</b> e dispara alertas (mapa de calor, e-mail e webhook) para regiões, aeroportos e órgãos sob a faixa de incerteza. É ferramenta de decisão, sem alarmismo.</p>
+    <p class="lead r" style="margin-top:34px">Uma plataforma que consome previsões de reentrada, calcula o <b style="color:var(--text)">corredor de risco no solo</b> e dispara alertas (mapa de calor e webhook) para regiões, aeroportos e órgãos sob a faixa de incerteza. É ferramenta de decisão, sem alarmismo.</p>
   </section>
 
   <!-- 6 — COMO FUNCIONA -->
@@ -320,7 +320,7 @@ h2{font-family:var(--display); font-weight:600; font-size:clamp(2rem,4.2vw,3.4re
       <div class="step r"><div class="i">01 · INGEST</div><h4>Previsão</h4><p>Space-Track TIP + CelesTrak + Aerospace CORDS. Dado-fonte gratuito.</p></div>
       <div class="step r"><div class="i">02 · ÓRBITA</div><h4>Ground-track</h4><p>skyfield propaga a órbita na janela de incerteza → trilha no solo.</p></div>
       <div class="step r"><div class="i">03 · RISCO</div><h4>Corredor</h4><p>shapely + PostGIS cruzam o corredor com aeroportos e regiões → <b style="color:var(--text)">índice 0–100 + tier</b>.</p></div>
-      <div class="step r"><div class="i">04 · ALERTA</div><h4>Ação</h4><p>Mapa, globo 3D, e-mail e webhook para quem está sob a faixa.</p></div>
+      <div class="step r"><div class="i">04 · ALERTA</div><h4>Ação</h4><p>Mapa, globo 3D e webhook para quem está sob a faixa.</p></div>
     </div>
     <p class="lead r" style="margin-top:36px"><span class="mono sig">Python · FastAPI · skyfield · PostGIS · React · globo 3D</span></p>
   </section>
@@ -373,7 +373,7 @@ h2{font-family:var(--display); font-weight:600; font-size:clamp(2rem,4.2vw,3.4re
     <h2 class="r">API freemium.</h2>
     <div class="tiers">
       <div class="tier r"><div class="nm">Free</div><h4>Público</h4><p>Reentradas previstas, risco por região, mapa de calor, histórico. Bem social + adoção.</p></div>
-      <div class="tier feat r"><div class="nm">Pro</div><h4>Aviação / Defesa civil</h4><p>Assinatura de alerta (e-mail/webhook), SLA, alerta por região. DECEA, aeroportos, companhias.</p></div>
+      <div class="tier feat r"><div class="nm">Pro</div><h4>Aviação / Defesa civil</h4><p>Assinatura de alerta por webhook, SLA, alerta por região. DECEA, aeroportos, companhias.</p></div>
       <div class="tier r"><div class="nm">Insurance</div><h4>Seguradoras</h4><p>Score por ativo/apólice + analytics histórico + incerteza detalhada para subscrição.</p></div>
     </div>
   </section>
@@ -394,7 +394,7 @@ h2{font-family:var(--display); font-weight:600; font-size:clamp(2rem,4.2vw,3.4re
     <div class="eyebrow r">Visão</div>
     <h2 class="r">Do protótipo à malha de alerta operacional.</h2>
     <div class="pipe" style="grid-template-columns:repeat(3,1fr)">
-      <div class="step r"><div class="i">HOJE</div><h4>Protótipo funcional</h4><p>Dados globais (Space-Track), corredor + índice 0–100, mapa e globo 3D, alerta por e-mail/webhook.</p></div>
+      <div class="step r"><div class="i">HOJE</div><h4>Protótipo funcional</h4><p>Dados globais (Space-Track), corredor + índice 0–100, mapa e globo 3D, alerta por webhook.</p></div>
       <div class="step r"><div class="i">PRÓXIMO</div><h4>B2B</h4><p>Webhooks, tier seguradoras, integração com despacho aéreo e defesa civil.</p></div>
       <div class="step r"><div class="i">VISÃO</div><h4>Operação com SLA</h4><p>Rede de alerta com SLA + parcerias com autoridades de aviação e defesa civil.</p></div>
     </div>

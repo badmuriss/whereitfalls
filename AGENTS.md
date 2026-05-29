@@ -1,6 +1,6 @@
 # WhereItFalls — Codex / Agents
 
-Alerta de queda de detritos espaciais para defesa civil, aviação e população. Consome previsões de reentrada (Space-Track TIP / CelesTrak / Aerospace CORDS), calcula corredor de risco no solo e alerta (mapa de calor, e-mail, webhook). Foco Brasil-first. Projeto FIAP GS "Space Connect", entrega 2026-06-09.
+Alerta de queda de detritos espaciais para defesa civil, aviação e população. Consome previsões de reentrada (Space-Track TIP / CelesTrak / Aerospace CORDS), calcula corredor de risco no solo e alerta (mapa de calor, webhook). Foco Brasil-first. Projeto FIAP GS "Space Connect", entrega 2026-06-09.
 
 ## Skills do projeto (formato Codex)
 

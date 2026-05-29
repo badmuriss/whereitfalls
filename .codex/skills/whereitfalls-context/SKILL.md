@@ -7,7 +7,7 @@ description: Contexto-mestre do WhereItFalls (alerta de queda de detritos espaci
 
 Variante Codex da skill de contexto. Mantenha em sincronia com `.claude/skills/whereitfalls-context/SKILL.md`.
 
-**Produto:** alerta de queda de detritos espaciais para defesa civil, aviação e população. Consome previsões de reentrada, calcula o **corredor de risco no solo** e alerta (mapa de calor, e-mail, webhook).
+**Produto:** alerta de queda de detritos espaciais para defesa civil, aviação e população. Consome previsões de reentrada, calcula o **corredor de risco no solo** e alerta (mapa de calor, webhook).
 
 **Posicionamento:** "Eles evitam colisão lá em cima; WhereItFalls avisa quem está embaixo." Apoio à decisão — não alarme individual. Projeto FIAP GS "Space Connect", entrega 2026-06-09, **Brasil-first**.
 
@@ -17,7 +17,7 @@ Variante Codex da skill de contexto. Mantenha em sincronia com `.claude/skills/w
 
 ## Pipeline
 
-`ingest` (Space-Track TIP + CelesTrak + CORDS) → `orbit` (skyfield → ground-track ±incerteza) → `risk` (shapely corredor + PostGIS overlay → score) → `alerts` (e-mail/webhook) + frontend (globo 3D + heatmap).
+`ingest` (Space-Track TIP + CelesTrak + CORDS) → `orbit` (skyfield → ground-track ±incerteza) → `risk` (shapely corredor + PostGIS overlay → score) → `alerts` (webhook) + frontend (globo 3D + heatmap).
 
 ## Stack
 
@@ -29,7 +29,7 @@ TIP = reentrada prevista (epoch+incerteza+lat/lon) · ground-track = trilha sub-
 
 ## Estado
 
-Planejamento — sem código de app ainda. MVP = ingest→corredor→overlay→heatmap+API+e-mail (ver `docs/PLAN.md`).
+Planejamento — sem código de app ainda. MVP = ingest→corredor→overlay→heatmap+API+alerta por webhook (ver `docs/PLAN.md`).
 
 ## Princípios
 

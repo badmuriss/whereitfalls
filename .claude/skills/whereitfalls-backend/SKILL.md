@@ -22,7 +22,7 @@ backend/app/{main.py, core/, models/, schemas/, api/, services/, jobs/}
 - **ingest.py**: clientes Space-Track (`tip` = reentrada prevista + incerteza + lat/lon; `gp` = TLE), CelesTrak (TLE, sem key), CORDS (histórico). Upsert idempotente. Pulls **espaçados** (respeitar rate limit; cache).
 - **orbit.py**: skyfield/sgp4 propaga TLE sobre `[epoch ± incerteza]` → ground-track (lista lat/lon). Sem modelar decaimento — consumir previsão pronta.
 - **risk.py**: shapely faz buffer do ground-track → corredor; PostGIS faz overlay com aeroportos/regiões/pop → score por ativo/região.
-- **alerts.py**: corredor ∩ assinatura acima do limiar → e-mail (SMTP/SendGrid) + webhook (httpx POST, assinatura HMAC). Grava `AlertEvent`.
+- **alerts.py**: corredor ∩ assinatura acima do limiar → webhook (httpx POST, assinatura HMAC). Grava `AlertEvent`. (Sem e-mail neste MVP.)
 
 ## Convenções
 
@@ -46,7 +46,7 @@ Logging estruturado (JSON, com norad_id/prediction_id no contexto) · `/health` 
 
 ## Jobs (APScheduler)
 
-`pull_predictions` (a cada `INGEST_INTERVAL_HOURS`) → `recompute_risk` (previsões novas/alteradas) → `dispatch_alerts`. Jobs idempotentes e logados.
+`pull_predictions` (a cada `INGEST_INTERVAL_HOURS`) → `recompute_risk` (previsões novas/alteradas). Jobs idempotentes e logados. (Sem job de envio de alerta neste MVP — sem disparo autônomo.)
 
 ## Commits
 

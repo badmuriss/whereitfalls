@@ -36,9 +36,9 @@ Todas gratuitas. Verificar acesso/limites no spike do Dia 1.
 | **IBGE malha municipal** (opcional) | regiões BR detalhadas | aberto |
 | **WorldPop / GPW** (opcional, stretch) | densidade populacional p/ peso de risco | aberto (CC BY) |
 
-## 5. E-mail (alertas)
+## 5. Alertas (webhook)
 
-- SMTP genérico ou **SendGrid/Mailgun free tier** para envio transacional. Variável `EMAIL_*` no `.env`.
+- Canal de alerta deste MVP é **webhook** (HTTP POST assinado). Sem envio de e-mail no protótipo acadêmico.
 
 ## Variáveis de ambiente (rascunho `.env.example`)
 
@@ -47,11 +47,6 @@ SPACETRACK_USER=
 SPACETRACK_PASS=
 CELESTRAK_BASE=https://celestrak.org
 DATABASE_URL=postgresql+psycopg://wif:wif@db:5432/whereitfalls
-EMAIL_HOST=
-EMAIL_PORT=587
-EMAIL_USER=
-EMAIL_PASS=
-EMAIL_FROM=alertas@whereitfalls.app
 INGEST_INTERVAL_HOURS=6
 ```
 

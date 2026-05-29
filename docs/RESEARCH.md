@@ -62,7 +62,7 @@ A previsão de reentrada tem **~±20% de incerteza** na janela orbital → a peg
 - **Mapa de calor** de risco por região + heatmap **histórico** de quedas (CORDS) → narrativa "isto acontece muito".
 - **Countdown** para a janela de reentrada + nível de confiança.
 - **Score de risco** por ativo (aeroporto, cidade) e por apólice (seguro).
-- **Alertas** multicanal: e-mail por região assinada + **webhook** B2B (integra com despacho/sistemas de defesa civil).
+- **Alertas** por **webhook** B2B por região assinada (integra com despacho/sistemas de defesa civil).
 
 ## Fontes
 

@@ -20,7 +20,7 @@ Estrutura segue o método da Parte 1 e dos roteiros da `vigilante-ai/docs`: bloc
 | 3 — Ingest de dados reais | 0:50 → 1:25 | 35s | reentrada real do Space-Track no sistema |
 | 4 — Globo 3D + corredor de risco | 1:25 → 2:15 | 50s | **o "uau"** — órbita + ground-track + corredor |
 | 5 — Mapa de calor (Brasil) | 2:15 → 2:50 | 35s | heatmap de risco por região/aeroporto |
-| 6 — Alerta (e-mail/webhook) | 2:50 → 3:25 | 35s | assinar região → disparar alerta |
+| 6 — Alerta (webhook) | 2:50 → 3:25 | 35s | assinar região (webhook) → payload do alerta |
 | 7 — API / Swagger | 3:25 → 3:50 | 25s | mostrar `/docs` e um endpoint respondendo |
 | 8 — Fechamento + próximos passos | 3:50 → 4:00 | 10s | impacto + visão |
 
@@ -57,7 +57,7 @@ Estrutura segue o método da Parte 1 e dos roteiros da `vigilante-ai/docs`: bloc
 
 ### [2:50 — Bloco 6 — Alerta]
 [Assinar uma região → disparar]
-> `[PREENCHER: criar assinatura de uma região; mostrar e-mail recebido e/ou payload do webhook (JSON com corredor + score)]`
+> `[PREENCHER: criar assinatura de uma região (canal webhook) via API; mostrar o payload do webhook (JSON com corredor + score)]`
 > O alerta vai pra quem precisa decidir: defesa civil, aeroporto, seguradora.
 
 ### [3:25 — Bloco 7 — API / Swagger]
@@ -86,7 +86,7 @@ Estrutura segue o método da Parte 1 e dos roteiros da `vigilante-ai/docs`: bloc
 - [ ] `docker compose up` com tudo UP (`docker compose ps`).
 - [ ] Banco com reentrada(s) e 1 região assinada.
 - [ ] Globo 3D renderizando suave.
-- [ ] E-mail/webhook de teste configurado e testado.
+- [ ] Webhook de teste configurado e testado.
 - [ ] Browser fullscreen, zoom 100%, sem extensão visível.
 - [ ] Áudio testado; cronômetro visível.
 - [ ] Publicar no YouTube; link no `.txt` do entregável.

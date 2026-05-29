@@ -5,7 +5,7 @@ description: Contexto-mestre do projeto WhereItFalls (alerta de queda de detrito
 
 # WhereItFalls — Contexto
 
-**Produto:** alerta de queda de detritos espaciais (satélites mortos, estágios de foguete, debris) para defesa civil, aviação e população. Consome previsões de reentrada, calcula o **corredor de risco no solo** e alerta (mapa de calor, e-mail, webhook).
+**Produto:** alerta de queda de detritos espaciais (satélites mortos, estágios de foguete, debris) para defesa civil, aviação e população. Consome previsões de reentrada, calcula o **corredor de risco no solo** e alerta (mapa de calor, webhook).
 
 **Posicionamento (1 frase):** "Eles evitam colisão lá em cima; WhereItFalls avisa quem está embaixo." Apoio à decisão para autoridades — **não** alarme individual.
 
@@ -20,7 +20,7 @@ description: Contexto-mestre do projeto WhereItFalls (alerta de queda de detrito
 
 ## Pipeline (mental model)
 
-`ingest` (Space-Track TIP + CelesTrak + CORDS) → `orbit` (skyfield → ground-track na janela ±incerteza) → `risk` (shapely corredor + PostGIS overlay aeroportos/regiões/pop → score) → `alerts` (e-mail/webhook) + frontend (globo 3D + heatmap).
+`ingest` (Space-Track TIP + CelesTrak + CORDS) → `orbit` (skyfield → ground-track na janela ±incerteza) → `risk` (shapely corredor + PostGIS overlay aeroportos/regiões/pop → score) → `alerts` (webhook) + frontend (globo 3D + heatmap).
 
 ## Stack
 
@@ -36,7 +36,7 @@ Python · FastAPI · APScheduler · skyfield/sgp4 · shapely/geopandas · Postgr
 
 ## Escopo / estado
 
-Ver `docs/PLAN.md`. **Estado: planejamento — sem código de app ainda.** MVP = ingest→corredor→overlay→heatmap+API+e-mail. Stretch = webhooks, heatmap histórico, peso populacional, tier seguro.
+Ver `docs/PLAN.md`. **Estado: planejamento — sem código de app ainda.** MVP = ingest→corredor→overlay→heatmap+API+alerta por webhook. Stretch = heatmap histórico, peso populacional, tier seguro.
 
 ## Princípios
 

@@ -10,7 +10,7 @@ Mini-challenge de 15 dias (FIAP GS). Entrega **2026-06-09**. Princípio: entrega
 - Corredor de risco (shapely) + overlay com aeroportos + regiões BR (PostGIS) → score.
 - API REST: `/v1/reentries`, `/v1/risk`, `/v1/risk/heatmap`, `/health` + Swagger.
 - Frontend: globo 3D (órbita + corredor) + lista de reentradas + mapa de calor de risco.
-- Alerta por **e-mail** em região assinada.
+- Alerta por **webhook** em região assinada.
 - Docker Compose (backend + PostGIS + frontend) rodando local.
 - README + testes essenciais (orbit/risk) + observabilidade (logging + `/health`).
 
@@ -29,7 +29,7 @@ Mini-challenge de 15 dias (FIAP GS). Entrega **2026-06-09**. Princípio: entrega
 | 1–2 | Repo, FastAPI skeleton, models/migrations, **spike Space-Track/CelesTrak** | validar acesso TIP + parsing |
 | 3–5 | `orbit` (ground-track) + `risk` (corredor + overlay aeroportos/regiões + score) | núcleo técnico |
 | 6–8 | Endpoints API + frontend: globo 3D + mapa de calor | "uau" visual |
-| 9–10 | E-mail + assinaturas; (webhooks se der) | alertas |
+| 9–10 | Assinaturas + alerta por webhook (HMAC) | alertas |
 | 11–12 | Polish UI (design system "Mission Control"), heatmap histórico, README | anti-AI |
 | 13 | Testes, observabilidade, dockerizar tudo | qualidade |
 | 14 | Gravar demo (4 min) + vídeo-pitch | entrega |
@@ -59,6 +59,6 @@ Mini-challenge de 15 dias (FIAP GS). Entrega **2026-06-09**. Princípio: entrega
 - [x] Upsert idempotente de objetos/previsões em SQLModel quando DB está disponível.
 - [x] Recompute persiste corredores de risco gerados em SQLModel.
 - [ ] Globo mostra órbita + corredor; heatmap mostra risco sobre BR.
-- [ ] Assinar região e receber e-mail de alerta funciona (simulado/free no MVP acadêmico).
+- [ ] Assinar região (canal webhook) funciona (simulado/free no MVP acadêmico).
 - [x] Testes de orbit/risk passam; `/health` ok.
 - [ ] README permite rodar do zero.

@@ -8,7 +8,7 @@
 
 ## 1. Resumo executivo
 
-WhereItFalls é uma plataforma que transforma previsões de reentrada de objetos espaciais (satélites mortos, estágios de foguete, detritos) em **alerta de risco no solo**, acionável para **defesa civil, aviação e seguradoras**. Consome dado orbital gratuito, calcula o **corredor de risco** sobre o território e dispara alertas (mapa de calor, e-mail, webhook). Foco inicial: **Brasil**.
+WhereItFalls é uma plataforma que transforma previsões de reentrada de objetos espaciais (satélites mortos, estágios de foguete, detritos) em **alerta de risco no solo**, acionável para **defesa civil, aviação e seguradoras**. Consome dado orbital gratuito, calcula o **corredor de risco** sobre o território e dispara alertas (mapa de calor, webhook). Foco inicial: **Brasil**.
 
 ## 2. O problema
 
@@ -42,7 +42,7 @@ Pipeline backend que vira produto:
 1. **Ingest** — previsões de reentrada (Space-Track TIP) + elementos orbitais (CelesTrak) + histórico (Aerospace CORDS). Dado-fonte **gratuito**.
 2. **Órbita** — `skyfield` propaga a órbita na janela de incerteza → *ground-track* (trilha no solo).
 3. **Risco** — `shapely` + PostGIS geram o **corredor de risco** e cruzam com aeroportos, regiões e densidade populacional → **score**.
-4. **Alerta** — mapa de calor (globo 3D + heatmap), e-mail e webhook para quem está sob a faixa de incerteza.
+4. **Alerta** — mapa de calor (globo 3D + heatmap) e webhook para quem está sob a faixa de incerteza.
 
 **Posicionamento**: apoio à decisão para autoridades (qual aeroporto/corredor/região está sob a faixa, para gerenciar espaço aéreo e priorizar resposta) — **não** alarme individual. Esse enquadramento responde à incerteza de ~±20% da previsão e é exatamente o que a literatura pede.
 
@@ -66,7 +66,7 @@ Pipeline backend que vira produto:
 API **freemium**:
 
 - **Free** — leitura de reentradas, risco por região, mapa de calor, histórico (público, pesquisa, imprensa). Bem social + adoção.
-- **Pro** — assinatura de alerta (e-mail/webhook), SLA, alerta por região (aviação, aeroportos, defesa civil).
+- **Pro** — assinatura de alerta por webhook, SLA, alerta por região (aviação, aeroportos, defesa civil).
 - **Insurance** — score por ativo/apólice, analytics histórico, incerteza detalhada (seguradoras / underwriting).
 
 ## 8. Impacto

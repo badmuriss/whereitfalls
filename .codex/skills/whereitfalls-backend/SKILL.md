@@ -19,7 +19,7 @@ FastAPI · APScheduler · skyfield/sgp4 · shapely/geopandas/pyproj · SQLModel 
 - **ingest.py**: Space-Track `tip` (reentrada + incerteza + lat/lon) e `gp` (TLE); CelesTrak (TLE, sem key); CORDS (histórico). Upsert idempotente, pulls espaçados (rate limit + cache).
 - **orbit.py**: skyfield propaga TLE em `[epoch ± incerteza]` → ground-track. Consumir previsão pronta, não modelar decaimento.
 - **risk.py**: shapely buffer → corredor; PostGIS overlay aeroportos/regiões/pop → score.
-- **alerts.py**: corredor ∩ assinatura > limiar → e-mail + webhook (HMAC). Grava `AlertEvent`.
+- **alerts.py**: corredor ∩ assinatura > limiar → webhook (HMAC). Grava `AlertEvent`. (Sem e-mail neste MVP.)
 
 ## Convenções
 
@@ -35,6 +35,6 @@ pytest: orbit (ground-track de TLE conhecido), risk (score esperado/ponto fora=0
 
 ## Jobs
 
-APScheduler: `pull_predictions` → `recompute_risk` → `dispatch_alerts`. Idempotentes e logados.
+APScheduler: `pull_predictions` → `recompute_risk`. Idempotentes e logados. (Sem job de envio de alerta neste MVP.)
 
 Commits: conventional, sem "Claude Code".
