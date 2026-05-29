@@ -40,7 +40,7 @@ Ver `docs/PLAN.md`. **Estado: planejamento — sem código de app ainda.** MVP =
 
 ## Princípios
 
-Type-safety e2e · observabilidade (logging + Sentry + /health) · testes (pytest/Vitest) · legibilidade > esperteza · conventional commits (sem "Claude Code" na mensagem).
+Type-safety e2e · observabilidade (logging + /health) · testes (pytest/Vitest) · legibilidade > esperteza · conventional commits (sem "Claude Code" na mensagem).
 
 ## Docs de referência
 

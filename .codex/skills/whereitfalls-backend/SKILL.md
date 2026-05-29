@@ -11,7 +11,7 @@ Pipeline: `ingest` → `orbit` → `risk` → `alerts` + API.
 
 ## Stack & estrutura
 
-FastAPI · APScheduler · skyfield/sgp4 · shapely/geopandas/pyproj · SQLModel · psycopg/PostGIS · httpx · sentry-sdk · pytest.
+FastAPI · APScheduler · skyfield/sgp4 · shapely/geopandas/pyproj · SQLModel · psycopg/PostGIS · httpx · pytest.
 `backend/app/{main.py, core/, models/, schemas/, api/, services/, jobs/}`.
 
 ## Serviços
@@ -30,7 +30,7 @@ FastAPI · APScheduler · skyfield/sgp4 · shapely/geopandas/pyproj · SQLModel 
 
 ## Observabilidade & testes
 
-Logging estruturado (norad_id/prediction_id no contexto) · Sentry · `/health`. Falha de fonte externa loga sem derrubar job.
+Logging estruturado (norad_id/prediction_id no contexto) · `/health`. Falha de fonte externa loga sem derrubar job.
 pytest: orbit (ground-track de TLE conhecido), risk (score esperado/ponto fora=0), api (contrato via TestClient), mockar HTTP externo.
 
 ## Jobs

@@ -9,13 +9,13 @@ Pipeline: `ingest` → `orbit` → `risk` → `alerts` + API. Detalhe em `docs/A
 
 ## Stack & estrutura
 
-FastAPI · APScheduler · skyfield/sgp4 · shapely/geopandas/pyproj · SQLModel · psycopg/PostGIS · httpx · sentry-sdk · pytest.
+FastAPI · APScheduler · skyfield/sgp4 · shapely/geopandas/pyproj · SQLModel · psycopg/PostGIS · httpx · pytest.
 
 ```
 backend/app/{main.py, core/, models/, schemas/, api/, services/, jobs/}
 ```
 
-`core/` = config(env)/db/logging/sentry/scheduler · `models/` SQLModel · `schemas/` Pydantic · `api/` routers · `services/` ingest|orbit|risk|alerts · `jobs/` tarefas APScheduler.
+`core/` = config(env)/db/logging/scheduler · `models/` SQLModel · `schemas/` Pydantic · `api/` routers · `services/` ingest|orbit|risk|alerts · `jobs/` tarefas APScheduler.
 
 ## Serviços (responsabilidade)
 
@@ -35,7 +35,7 @@ backend/app/{main.py, core/, models/, schemas/, api/, services/, jobs/}
 
 ## Observabilidade
 
-Logging estruturado (JSON, com norad_id/prediction_id no contexto) · Sentry (`SENTRY_DSN`) · `/health` (DB + última ingestão). Logar falha de fonte externa sem derrubar o job.
+Logging estruturado (JSON, com norad_id/prediction_id no contexto) · `/health` (DB + última ingestão). Logar falha de fonte externa sem derrubar o job.
 
 ## Testes (pytest)
 

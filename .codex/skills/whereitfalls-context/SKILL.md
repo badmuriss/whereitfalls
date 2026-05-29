@@ -33,7 +33,7 @@ Planejamento — sem código de app ainda. MVP = ingest→corredor→overlay→h
 
 ## Princípios
 
-Type-safety e2e · observabilidade (logging+Sentry+/health) · testes · legibilidade · conventional commits.
+Type-safety e2e · observabilidade (logging+/health) · testes · legibilidade · conventional commits.
 
 ## Docs
 
